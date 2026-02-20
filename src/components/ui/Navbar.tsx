@@ -1,8 +1,9 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Logo from './Logo';
+import ResumeDrawer from './ResumeDrawer';
 import styles from './Navbar.module.scss';
 
 const NAV_LINKS = [
@@ -49,12 +50,25 @@ const MenuIcon = ({ open }: { open: boolean }) => open ? (
     </svg>
 );
 
+// Resume icon
+const ResumeIcon = () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+        <polyline points="10 9 9 9 8 9" />
+    </svg>
+);
+
 export default function Navbar() {
     const { theme, setTheme, resolvedTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('');
+    const [resumeOpen, setResumeOpen] = useState(false);
+    const handleResumeClose = useCallback(() => setResumeOpen(false), []);
 
     // Avoid hydration mismatch for theme icon
     useEffect(() => { setMounted(true); }, []);
@@ -182,6 +196,16 @@ export default function Navbar() {
                             {mounted && (resolvedTheme === 'dark' ? <SunIcon /> : <MoonIcon />)}
                         </button>
 
+                        <button
+                            className={styles.resumeBtn}
+                            onClick={() => setResumeOpen(true)}
+                            aria-label="View resume"
+                            title="View Resume"
+                        >
+                            <ResumeIcon />
+                            <span>Resume</span>
+                        </button>
+
                         <a href="#contact" className={styles.ctaBtn}>
                             Let&apos;s talk
                         </a>
@@ -225,17 +249,10 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                {/* Footer CTA inside overlay */}
-                <div className={styles.mobileMenuFooter}>
-                    <a
-                        href="#contact"
-                        className={activeSection === 'contact' ? styles.active : ''}
-                        onClick={handleNavClick}
-                    >
-                        Let&apos;s talk
-                    </a>
-                </div>
+
             </div>
+
+            <ResumeDrawer isOpen={resumeOpen} onClose={handleResumeClose} />
         </>
     );
 }

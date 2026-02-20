@@ -1,0 +1,475 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// ─── Backdrop ─────────────────────────────────
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(10, 15, 30, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+
+    &.backdropVisible {
+        opacity: 1;
+        pointer-events: all;
+    }
+}
+
+// ─── Drawer Panel ─────────────────────────────
+
+.drawer {
+    position: fixed;
+    z-index: 201;
+    display: flex;
+    flex-direction: column;
+    background: #0f172a;
+    outline: none;
+    padding: 0;
+    overflow: hidden;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+
+    // ── Mobile: bottom sheet ──
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: 100%;
+    max-width: 100%;
+    height: 92dvh; // leaves a peek of the content behind
+    border-radius: $radius-xl $radius-xl 0 0;
+    box-shadow: 0 -20px 80px rgba(0, 0, 0, 0.5);
+    transform: translateY(100%);
+
+    &.drawerOpen {
+        transform: translateY(0);
+    }
+
+    // ── Tablet and up: right-side panel ──
+    @include md {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: auto;
+        width: 100%;
+        max-width: 600px;
+        height: auto;
+        border-radius: 0;
+        box-shadow: -20px 0 80px rgba(0, 0, 0, 0.5);
+        transform: translateX(100%);
+
+        &.drawerOpen {
+            transform: translateX(0);
+        }
+    }
+
+    @include lg {
+        max-width: 760px;
+    }
+
+    // Force premium scrollbar on the drawer itself
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--color-border);
+        border-radius: $radius-full;
+
+        &:hover {
+            background: var(--color-accent);
+        }
+    }
+}
+
+// ─── Mobile drag handle ─────────────────────────────────
+
+.dragHandle {
+    display: block;
+    width: 40px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: $radius-full;
+    margin: $space-3 auto $space-1;
+    flex-shrink: 0;
+
+    @include md {
+        display: none; // hidden on desktop side panel
+    }
+}
+
+// ─── Floating Glass Header ──────────────────────────────
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-2;
+    padding: $space-2 $space-3;
+    margin: 0 $space-3 0;
+    border-radius: $radius-lg;
+    background: rgba(30, 45, 74, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+
+    @include md {
+        position: absolute;
+        top: $space-4;
+        left: $space-4;
+        right: $space-4;
+        margin: 0;
+        padding: $space-3 $space-4;
+        gap: $space-4;
+    }
+
+    @include lg {
+        left: $space-6;
+        right: $space-6;
+        padding: $space-3 $space-6;
+    }
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    min-width: 0; // allow text truncation
+
+    @include md {
+        gap: $space-3;
+    }
+}
+
+.statusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: $radius-full;
+    background: #2dd4bf;
+    box-shadow: 0 0 12px rgba(45, 212, 191, 0.5);
+    flex-shrink: 0;
+    animation: pulse 2.5s ease-in-out infinite;
+
+    @keyframes pulse {
+
+        0%,
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        50% {
+            transform: scale(1.3);
+            opacity: 0.7;
+        }
+    }
+}
+
+.headerInfo {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.headerTitle {
+    font-size: $text-sm;
+    font-weight: $fw-bold;
+    color: #fff;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.headerSub {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+}
+
+.headerActions {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    flex-shrink: 0;
+
+    @include md {
+        gap: $space-2;
+    }
+}
+
+.downloadBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    padding: $space-2 $space-2;
+    border-radius: $radius-md;
+    background: var(--color-accent);
+    color: #0a0f1e;
+    font-size: $text-xs;
+    font-weight: $fw-bold;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+
+    svg {
+        width: 14px;
+        height: 14px;
+        stroke-width: 3;
+        flex-shrink: 0;
+    }
+
+    // Hide the text label on small screens, show icon only
+    .downloadLabel {
+        display: none;
+
+        @include sm {
+            display: inline;
+        }
+    }
+
+    @include sm {
+        padding: $space-2 $space-3;
+        gap: $space-2;
+    }
+
+    @include md {
+        padding: $space-2 $space-4;
+    }
+
+    &:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.1);
+        box-shadow: 0 4px 12px $color-accent-glow;
+    }
+}
+
+.iconBtn {
+    width: 32px;
+    height: 32px;
+    border-radius: $radius-md;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    @include flex-center;
+    color: #fff;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+
+    svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    @include md {
+        width: 36px;
+        height: 36px;
+
+        svg {
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: var(--color-accent);
+        border-color: var(--color-accent);
+    }
+
+    &.closeBtn:hover {
+        color: var(--color-accent);
+        border-color: var(--color-accent);
+        background: rgba(255, 75, 75, 0.1);
+    }
+
+    &.resetBtn:hover svg {
+        transform: rotate(-45deg);
+    }
+}
+
+// ─── Main Exhibit Container ───────────────────
+
+.exhibitArea {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden; // PDF viewer handles internal scroll
+    background:
+        radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 60%),
+        radial-gradient(circle at 80% 15%, rgba(30, 64, 175, 0.2) 0%, transparent 60%),
+        radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.1) 0%, transparent 80%),
+        radial-gradient(circle at 10% 90%, rgba(30, 64, 175, 0.12) 0%, transparent 60%);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // Mobile: small breathing room below drag handle + sticky header
+    padding: $space-3 $space-3 $space-3;
+
+    // Tablet and up: offset the absolutely-positioned floating header
+    @include md {
+        padding-top: $space-24;
+    }
+}
+
+// ─── Document Presentation (The Exhibit) ───────
+
+.docExhibit {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    min-height: 0;
+    width: calc(100% - #{$space-6});
+    max-width: 620px;
+    display: flex;
+    flex-direction: column;
+
+    @include md {
+        width: calc(100% - #{$space-12});
+    }
+
+    // Paper Stack/Fold Effect
+    &::after,
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: #fff;
+        border-radius: $radius-sm;
+        z-index: -1;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    &::before {
+        transform: rotate(-1.2deg);
+        opacity: 0.08;
+    }
+
+    &::after {
+        transform: rotate(0.8deg);
+        opacity: 0.08;
+    }
+}
+
+.pdfFrameWrapper {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    background: transparent;
+    border-radius: $radius-sm;
+    overflow: hidden;
+    box-shadow:
+        0 30px 60px -12px rgba(0, 0, 0, 0.5),
+        0 18px 36px -18px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.pdfFrame {
+    width: calc(100% + 18px);
+    height: 100%;
+    border: none;
+    display: block;
+    background: transparent !important;
+}
+
+
+// ─── Footer ───────────────────────────────────
+
+.footer {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    padding: $space-3 $space-4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(12px);
+}
+
+
+.footerText {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.3);
+    font-family: $font-mono;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+// ─── Light Mode Overrides ──────────────────────
+
+:global([data-theme='light']) {
+
+    .drawer {
+        background: #f1f5f9; // Cool light slate
+        box-shadow: 0 -20px 80px rgba(0, 0, 0, 0.15);
+
+        @include md {
+            box-shadow: -20px 0 80px rgba(0, 0, 0, 0.15);
+        }
+    }
+
+    .dragHandle {
+        background: rgba(0, 0, 0, 0.12);
+    }
+
+    .header {
+        background: rgba(255, 255, 255, 0.75);
+        border-color: rgba(0, 0, 0, 0.08);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    }
+
+    .headerTitle {
+        color: #0f172a;
+    }
+
+    .headerSub {
+        color: rgba(15, 23, 42, 0.5);
+    }
+
+    .iconBtn {
+        border-color: rgba(0, 0, 0, 0.12);
+        background: rgba(0, 0, 0, 0.05);
+        color: #0f172a;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        &.closeBtn:hover {
+            background: rgba(255, 75, 75, 0.08);
+        }
+    }
+
+    .exhibitArea {
+        background:
+            radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 60%),
+            radial-gradient(circle at 80% 15%, rgba(30, 64, 175, 0.07) 0%, transparent 60%),
+            radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.05) 0%, transparent 80%),
+            radial-gradient(circle at 10% 90%, rgba(30, 64, 175, 0.06) 0%, transparent 60%),
+            #e8eef7; // light blue-gray base
+    }
+
+    .footer {
+        background: rgba(241, 245, 249, 0.9);
+        border-top-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .footerText {
+        color: rgba(15, 23, 42, 0.35);
+    }
+}
