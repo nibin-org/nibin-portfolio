@@ -64,34 +64,63 @@ const EXPERIENCE = [
 
 export default function Experience() {
     const sectionRef = useRef<HTMLElement>(null);
+    const timelineRef = useRef<HTMLDivElement>(null);
+    const lineRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        let ctx: any;
         const initGsap = async () => {
             const { gsap } = await import('gsap');
             const { ScrollTrigger } = await import('gsap/ScrollTrigger');
             gsap.registerPlugin(ScrollTrigger);
 
-            const ctx = gsap.context(() => {
-                const items = gsap.utils.toArray('[data-experience-item]');
+            ctx = gsap.context(() => {
+                // Progress Line Animation
+                if (lineRef.current && timelineRef.current) {
+                    gsap.to(lineRef.current, {
+                        scaleY: 1,
+                        ease: 'none',
+                        scrollTrigger: {
+                            trigger: timelineRef.current,
+                            start: 'top 40%',
+                            end: 'bottom 40%',
+                            scrub: 0.5, // Smoother progress
+                        },
+                    });
+                }
 
+                // Markers Activation
+                const markers = gsap.utils.toArray('[data-experience-marker]');
+                markers.forEach((marker: any) => {
+                    ScrollTrigger.create({
+                        trigger: marker,
+                        start: 'top 40%',
+                        onEnter: () => marker.classList.add(styles.active),
+                        onLeaveBack: () => marker.classList.remove(styles.active),
+                    });
+                });
+
+                // Items Reveal
+                const items = gsap.utils.toArray('[data-experience-item]');
                 items.forEach((item: any) => {
                     gsap.from(item, {
-                        x: -20,
+                        y: 20,
                         opacity: 0,
-                        duration: 0.8,
+                        duration: 1,
                         ease: 'power3.out',
                         scrollTrigger: {
                             trigger: item,
-                            start: 'top 85%',
+                            start: 'top 90%',
                         },
                     });
                 });
             }, sectionRef);
-
-            return () => ctx.revert();
         };
 
-        initGsap();
+        const initPromise = initGsap();
+        return () => {
+            initPromise.then(() => ctx?.revert());
+        };
     }, []);
 
     return (
@@ -103,9 +132,14 @@ export default function Experience() {
                     A chronological journey through my career as a UI Engineer, focusing on growth, architecture, and design systems.
                 </p>
 
-                <div className={styles.timeline}>
+                <div className={styles.timeline} ref={timelineRef}>
+                    <div className={styles.progressTrack}>
+                        <div className={styles.progressLine} ref={lineRef} />
+                    </div>
+
                     {EXPERIENCE.map((job, index) => (
                         <div key={`${job.company}-${index}`} className={styles.item} data-experience-item>
+                            <div className={styles.marker} data-experience-marker />
                             <div className={styles.header}>
                                 <span className={styles.period}>{job.period}</span>
                                 <h3 className={styles.role}>{job.role}</h3>
