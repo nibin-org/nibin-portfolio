@@ -2,6 +2,7 @@
 
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
+import Logo from './Logo';
 import styles from './Navbar.module.scss';
 
 const NAV_LINKS = [
@@ -148,12 +149,8 @@ export default function Navbar() {
             <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`} role="navigation" aria-label="Main navigation">
                 <div className={styles.inner}>
                     {/* Logo */}
-                    <a href="#hero" className={styles.logo} aria-label="Nibin Kurian — Home">
-                        <div className={styles.logo__mark}>NK</div>
-                        <div className={styles.logo__name}>
-                            Nibin Kurian
-                            <span>UI Engineer</span>
-                        </div>
+                    <a href="/" className={styles.logo} aria-label="Nibin Kurian — Home">
+                        <Logo size="sm" />
                     </a>
 
                     {/* Desktop nav links */}

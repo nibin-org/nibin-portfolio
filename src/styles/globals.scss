@@ -16,6 +16,11 @@
     --color-accent-text: #{$color-accent};
     --color-accent-glow: #{$color-accent-glow};
     --navbar-bg: rgba(10, 15, 30, 0.8);
+
+    // Logo Brand Colors
+    --color-logo-primary: #00E5FF;
+    --color-logo-secondary: #2979FF;
+    --color-logo-glow: rgba(0, 229, 255, 0.4);
 }
 
 [data-theme='light'] {
@@ -29,6 +34,11 @@
     --color-accent-text: #0ea5e9; // Darker sky blue for better contrast in light mode
     --color-accent-glow: #{$color-accent-glow};
     --navbar-bg: rgba(244, 246, 251, 0.85);
+
+    // Logo Brand Colors (Light Mode - Premium Dark)
+    --color-logo-primary: #0f172a; // Deep Indigo/Black
+    --color-logo-secondary: #1e293b;
+    --color-logo-glow: transparent;
 }
 
 // ─────────────────────────────────────────────

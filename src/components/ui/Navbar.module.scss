@@ -33,46 +33,11 @@
 .logo {
     display: flex;
     align-items: center;
-    gap: $space-3;
     text-decoration: none;
+    transition: opacity $transition-fast;
 
-    &__mark {
-        width: 36px;
-        height: 36px;
-        border-radius: $radius-md;
-        background: var(--color-accent);
-        @include flex-center;
-        font-size: $text-sm;
-        font-weight: $fw-black;
-        color: #0a0f1e;
-        letter-spacing: -0.05em;
-        font-family: $font-primary;
-        flex-shrink: 0;
-        transition: box-shadow $transition-normal;
-
-        [data-theme='light'] & {
-            color: #fff;
-        }
-    }
-
-    &__name {
-        font-size: $text-sm;
-        font-weight: $fw-semibold;
-        color: var(--color-text);
-        letter-spacing: -0.01em;
-        transition: color $transition-normal;
-
-        span {
-            display: block;
-            font-size: $text-xs;
-            font-weight: $fw-regular;
-            color: var(--color-text-muted);
-            letter-spacing: 0;
-        }
-    }
-
-    &:hover .logo__mark {
-        box-shadow: 0 0 0 4px $color-accent-glow;
+    &:hover {
+        opacity: 0.8;
     }
 }
 

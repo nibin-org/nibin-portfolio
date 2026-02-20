@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import Logo from './Logo';
 import styles from './Preloader.module.scss';
 
 export default function Preloader() {
@@ -54,9 +55,7 @@ export default function Preloader() {
 
     return (
         <div className={styles.preloader} ref={preloaderRef}>
-            <div className={styles.logo} ref={logoRef}>
-                NK
-            </div>
+            <Logo size="lg" className={styles.logo} />
             <div className={styles.progress}>
                 <div className={styles.progressBar} />
             </div>
