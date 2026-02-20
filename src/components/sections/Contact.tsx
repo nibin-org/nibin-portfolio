@@ -28,18 +28,12 @@ const GithubIcon = () => (
     </svg>
 );
 
-// Facebook Icon
-const FacebookIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-    </svg>
-);
+
 
 const SOCIAL_LINKS = [
-    { label: 'Email', icon: <MailIcon />, href: 'mailto:nibin.lab.99@gmail.com' },
+    { label: 'Email', icon: <MailIcon />, href: 'mailto:nibinkuriannk@gmail.com' },
     { label: 'LinkedIn', icon: <LinkedinIcon />, href: 'https://linkedin.com/in/nibin-kurian' },
     { label: 'GitHub', icon: <GithubIcon />, href: 'https://github.com/nibin-org' },
-    { label: 'Facebook', icon: <FacebookIcon />, href: 'https://www.facebook.com/nibin.kurian.58' },
 ];
 
 export default function Contact() {

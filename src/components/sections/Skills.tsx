@@ -10,7 +10,7 @@ const SKILL_GROUPS = [
     },
     {
         category: 'UI Development',
-        skills: ['React.js', 'Next.js', 'TypeScript', 'Component Architecture'],
+        skills: ['React.js', 'Next.js', 'Component Architecture'],
     },
     {
         category: 'Design Systems',
