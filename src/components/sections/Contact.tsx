@@ -127,7 +127,7 @@ export default function Contact() {
 
                         <div className={styles.linksColumn}>
                             <div className={styles.linkGroup}>
-                                <h4 className={styles.groupLabel}>Navigation</h4>
+                                <h3 className={styles.groupLabel}>Navigation</h3>
                                 <nav className={styles.navLinks}>
                                     <a href="#about" className={styles.footerLink}>About</a>
                                     <a href="#skills" className={styles.footerLink}>Skills</a>
@@ -135,7 +135,7 @@ export default function Contact() {
                                 </nav>
                             </div>
                             <div className={styles.linkGroup}>
-                                <h4 className={styles.groupLabel}>Social</h4>
+                                <h3 className={styles.groupLabel}>Social</h3>
                                 <nav className={styles.socialIcons}>
                                     {SOCIAL_LINKS.map(link => (
                                         <a
