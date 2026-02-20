@@ -19,25 +19,29 @@ const MailIcon = () => (
     </svg>
 );
 
+const ROLES = ['Frontend Developer', 'UI Engineer', 'Design System Architect'];
+
 const STATS = [
     { number: '5.6+', label: 'Years Experience' },
-    { number: '10+', label: 'Products Shipped' },
-    { number: '3+', label: 'Design Systems Built' },
+    { number: '80+', label: 'Projects Delivered' },
+    { number: '95+', label: 'Lighthouse Score' },
 ];
 
 export default function Hero() {
     const sectionRef = useRef<HTMLElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
+    const roleRef = useRef<HTMLSpanElement>(null);
 
     useEffect(() => {
-        // Dynamically import GSAP to avoid SSR issues
         const initGsap = async () => {
             const { gsap } = await import('gsap');
+            const { TextPlugin } = await import('gsap/TextPlugin');
+            gsap.registerPlugin(TextPlugin);
 
             const ctx = gsap.context(() => {
                 const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-                // Staggered entrance for each child of contentRef
+                // Entrance animations
                 tl.from('[data-hero-badge]', { y: 20, opacity: 0, duration: 0.6 })
                     .from('[data-hero-name]', { y: 40, opacity: 0, duration: 0.7 }, '-=0.3')
                     .from('[data-hero-title]', { y: 30, opacity: 0, duration: 0.6 }, '-=0.4')
@@ -45,6 +49,23 @@ export default function Hero() {
                     .from('[data-hero-cta]', { y: 20, opacity: 0, duration: 0.5 }, '-=0.4')
                     .from('[data-hero-stats]', { y: 20, opacity: 0, duration: 0.5 }, '-=0.3')
                     .from('[data-scroll-hint]', { opacity: 0, duration: 0.6 }, '-=0.2');
+
+                // Typing Animation Loop
+                const roleTl = gsap.timeline({ repeat: -1 });
+
+                ROLES.forEach((role) => {
+                    roleTl.to(roleRef.current, {
+                        duration: 1.5,
+                        text: role,
+                        delay: 0.5,
+                        ease: "none"
+                    }).to(roleRef.current, {
+                        duration: 0.8,
+                        text: "",
+                        delay: 2, // Hold before backspacing
+                        ease: "none"
+                    });
+                });
             }, sectionRef);
 
             return () => ctx.revert();
@@ -75,18 +96,14 @@ export default function Hero() {
                     <span className={styles.accent}>Nibin Kurian.</span>
                 </h1>
 
-                {/* Title */}
+                {/* Title with Typing Animation */}
                 <p className={styles.title} data-hero-title>
-                    <span className={styles.highlight}>UI Engineer</span>
-                    <span className={styles.divider} aria-hidden="true" />
-                    Design Systems
-                    <span className={styles.divider} aria-hidden="true" />
-                    Component Libraries
+                    Professional <span className={styles.highlight} ref={roleRef}></span>
                 </p>
 
                 {/* Tagline */}
                 <p className={styles.tagline} data-hero-tagline>
-                    I craft interfaces that scale — turning design tokens into cohesive, accessible component systems that teams love to build with.
+                    Frontend Developer with 5.6+ years of experience building scalable web applications. Specialized in design systems, token-driven UI architecture, and reusable component libraries.
                 </p>
 
                 {/* CTA buttons */}

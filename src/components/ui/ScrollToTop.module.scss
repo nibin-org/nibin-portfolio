@@ -1,0 +1,57 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.scrollToTop {
+    position: fixed;
+    bottom: $space-8;
+    right: $space-8;
+    width: 44px;
+    height: 44px;
+    z-index: 90;
+
+    background: var(--navbar-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border);
+    border-radius: $radius-md;
+    color: var(--color-accent);
+
+    @include flex-center;
+    cursor: pointer;
+    transition: all $transition-normal;
+
+    // Hidden state
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px) scale(0.9);
+
+    svg {
+        width: 20px;
+        height: 20px;
+        transition: transform $transition-fast;
+    }
+
+    &.visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+    }
+
+    &:hover {
+        background: $color-accent-glow;
+        border-color: var(--color-accent);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px -10px rgba(56, 189, 248, 0.3);
+
+        svg {
+            transform: translateY(-2px);
+        }
+    }
+
+    @include sm {
+        bottom: $space-10;
+        right: $space-10;
+        width: 48px;
+        height: 48px;
+    }
+}

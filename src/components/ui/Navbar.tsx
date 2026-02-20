@@ -53,6 +53,7 @@ export default function Navbar() {
     const [mounted, setMounted] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [activeSection, setActiveSection] = useState('');
 
     // Avoid hydration mismatch for theme icon
     useEffect(() => { setMounted(true); }, []);
@@ -62,6 +63,71 @@ export default function Navbar() {
         const onScroll = () => setScrolled(window.scrollY > 20);
         window.addEventListener('scroll', onScroll, { passive: true });
         return () => window.removeEventListener('scroll', onScroll);
+    }, []);
+
+    // Active Section Tracking
+    useEffect(() => {
+        // Prevent default browser jump on refresh
+        if (window.history.scrollRestoration) {
+            window.history.scrollRestoration = 'manual';
+        }
+
+        const sections = ['hero', ...NAV_LINKS.map(link => link.href.replace('#', ''))];
+        const observerOptions = {
+            root: null,
+            rootMargin: '-40% 0px -40% 0px', // More centered for section detection
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+                    setActiveSection(id === 'hero' ? '' : id);
+
+                    // Update URL hash without jumping
+                    if (window.history.replaceState) {
+                        const newHash = id === 'hero' ? window.location.pathname : `#${id}`;
+                        window.history.replaceState(null, '', newHash);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) observer.observe(el);
+        });
+
+        let initialScrollTimer: any;
+
+        // Handle initial hash on page load
+        const initialHash = typeof window !== 'undefined' ? window.location.hash.replace('#', '') : '';
+        if (initialHash && initialHash !== 'hero') {
+            // Give a tiny delay for Next.js/Browser to settle at top
+            initialScrollTimer = setTimeout(() => {
+                const target = document.getElementById(initialHash);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 100);
+        }
+
+        const handleHeroScroll = () => {
+            if (window.scrollY < 50) {
+                setActiveSection('');
+                if (window.history.replaceState && window.location.hash) {
+                    window.history.replaceState(null, '', window.location.pathname);
+                }
+            }
+        };
+        window.addEventListener('scroll', handleHeroScroll);
+
+        return () => {
+            observer.disconnect();
+            window.removeEventListener('scroll', handleHeroScroll);
+            if (initialScrollTimer) clearTimeout(initialScrollTimer);
+        };
     }, []);
 
     // Lock body scroll when mobile menu is open
@@ -74,6 +140,8 @@ export default function Navbar() {
         setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
 
     const handleNavClick = () => setMenuOpen(false);
+
+    const toggleThemeLabel = resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
 
     return (
         <>
@@ -90,11 +158,20 @@ export default function Navbar() {
 
                     {/* Desktop nav links */}
                     <ul className={styles.navLinks} role="list">
-                        {NAV_LINKS.map(({ label, href }) => (
-                            <li key={href}>
-                                <a href={href} className={styles.navLink}>{label}</a>
-                            </li>
-                        ))}
+                        {NAV_LINKS.map(({ label, href }) => {
+                            const isActive = activeSection === href.replace('#', '');
+                            return (
+                                <li key={href}>
+                                    <a
+                                        href={href}
+                                        className={`${styles.navLink} ${isActive ? styles.active : ''}`}
+                                        aria-current={isActive ? 'page' : undefined}
+                                    >
+                                        {label}
+                                    </a>
+                                </li>
+                            );
+                        })}
                     </ul>
 
                     {/* Actions */}
@@ -102,9 +179,10 @@ export default function Navbar() {
                         <button
                             className={styles.themeToggle}
                             onClick={toggleTheme}
-                            aria-label={mounted ? `Switch to ${resolvedTheme === 'dark' ? 'light' : 'dark'} mode` : 'Toggle theme'}
+                            aria-label={mounted ? toggleThemeLabel : 'Toggle theme'}
+                            title={mounted ? toggleThemeLabel : 'Toggle theme'}
                         >
-                            {mounted ? (resolvedTheme === 'dark' ? <SunIcon /> : <MoonIcon />) : <div style={{ width: 18, height: 18 }} />}
+                            {mounted && (resolvedTheme === 'dark' ? <SunIcon /> : <MoonIcon />)}
                         </button>
 
                         <a href="#contact" className={styles.ctaBtn}>
@@ -113,10 +191,10 @@ export default function Navbar() {
 
                         {/* Mobile hamburger */}
                         <button
-                            className={styles.mobileMenuBtn}
-                            onClick={() => setMenuOpen(o => !o)}
+                            className={styles.mobileMenuToggle}
+                            onClick={() => setMenuOpen(!menuOpen)}
+                            aria-label={menuOpen ? "Close menu" : "Open menu"}
                             aria-expanded={menuOpen}
-                            aria-label="Toggle mobile menu"
                         >
                             <MenuIcon open={menuOpen} />
                         </button>
@@ -126,20 +204,39 @@ export default function Navbar() {
 
             {/* Mobile full-screen overlay menu */}
             <div
-                className={`${styles.mobileMenu} ${menuOpen ? styles.open : ''}`}
+                className={`${styles.mobileMenu} ${menuOpen ? styles.mobileMenuOpen : ''}`}
                 aria-hidden={!menuOpen}
                 role="dialog"
                 aria-label="Navigation menu"
             >
-                {NAV_LINKS.map(({ label, href }) => (
-                    <a key={href} href={href} className={styles.mobileNavLink} onClick={handleNavClick}>
-                        {label}
-                    </a>
-                ))}
+                <div className={styles.mobileMenuInner}>
+                    <div className={styles.mobileNav}>
+                        {NAV_LINKS.map(({ label, href }) => {
+                            const isActive = activeSection === href.replace('#', '');
+                            return (
+                                <a
+                                    key={href}
+                                    href={href}
+                                    className={`${styles.mobileNavLink} ${isActive ? styles.active : ''}`}
+                                    onClick={handleNavClick}
+                                    aria-current={isActive ? 'page' : undefined}
+                                >
+                                    {label}
+                                </a>
+                            );
+                        })}
+                    </div>
+                </div>
 
                 {/* Footer CTA inside overlay */}
                 <div className={styles.mobileMenuFooter}>
-                    <a href="#contact" onClick={handleNavClick}>Let&apos;s talk</a>
+                    <a
+                        href="#contact"
+                        className={activeSection === 'contact' ? styles.active : ''}
+                        onClick={handleNavClick}
+                    >
+                        Let&apos;s talk
+                    </a>
                 </div>
             </div>
         </>

@@ -13,6 +13,7 @@
     --color-text: #{$color-text-primary-dark};
     --color-text-muted: #{$color-text-secondary-dark};
     --color-accent: #{$color-accent};
+    --color-accent-text: #{$color-accent};
     --color-accent-glow: #{$color-accent-glow};
     --navbar-bg: rgba(10, 15, 30, 0.8);
 }
@@ -25,6 +26,7 @@
     --color-text: #{$color-text-primary-light};
     --color-text-muted: #{$color-text-secondary-light};
     --color-accent: #{$color-accent};
+    --color-accent-text: #0ea5e9; // Darker sky blue for better contrast in light mode
     --color-accent-glow: #{$color-accent-glow};
     --navbar-bg: rgba(244, 246, 251, 0.85);
 }
@@ -105,7 +107,7 @@ button {
     font-weight: $fw-semibold;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--color-accent);
+    color: var(--color-accent-text);
     margin-bottom: $space-4;
 
     &::before {

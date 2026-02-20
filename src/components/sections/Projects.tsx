@@ -31,12 +31,12 @@ const NpmIcon = () => (
 const PROJECTS = [
     {
         name: 'TokVista',
-        label: 'Featured Project',
-        description: 'A dedicated design system and component library built for rapid UI development. Token-driven architecture with high-performance components and seamless SASS integration.',
-        tags: ['Design System', 'Next.js', 'SCSS', 'TypeScript', 'NPM'],
-        demoUrl: '#',
-        githubUrl: '#',
-        npmUrl: '#',
+        label: 'Open Source NPM Package',
+        description: 'An open-source package that transforms Figma design tokens into interactive visual documentation. Built with AI-assisted development, featuring copy-ready CSS variables and a live interactive playground.',
+        tags: ['Design Tokens', 'Figma', 'React', 'Storybook', 'NPM'],
+        demoUrl: 'https://nibin-org.github.io/tokvista',
+        githubUrl: 'https://github.com/nibin-org/tokvista',
+        npmUrl: 'https://npmjs.com/package/tokvista',
     },
 ];
 
@@ -93,13 +93,13 @@ export default function Projects() {
                                 </div>
 
                                 <div className={styles.links}>
-                                    <a href={project.demoUrl} className={styles.link} target="_blank" rel="noopener noreferrer">
+                                    <a href={project.demoUrl} className={styles.link} target="_blank" rel="noopener noreferrer" aria-label={`View live demo of ${project.name}`}>
                                         <ExternalIcon /> Live Demo
                                     </a>
-                                    <a href={project.githubUrl} className={styles.link} target="_blank" rel="noopener noreferrer">
+                                    <a href={project.githubUrl} className={styles.link} target="_blank" rel="noopener noreferrer" aria-label={`View source code of ${project.name} on GitHub`}>
                                         <GithubIcon /> GitHub
                                     </a>
-                                    <a href={project.npmUrl} className={styles.link} target="_blank" rel="noopener noreferrer">
+                                    <a href={project.npmUrl} className={styles.link} target="_blank" rel="noopener noreferrer" aria-label={`View ${project.name} package on NPM`}>
                                         <NpmIcon /> NPM Package
                                     </a>
                                 </div>

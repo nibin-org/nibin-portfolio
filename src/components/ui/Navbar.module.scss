@@ -181,7 +181,7 @@
 
 // ─── Mobile menu ──────────────────────────────
 
-.mobileMenuBtn {
+.mobileMenuToggle {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -236,7 +236,7 @@
         display: none !important;
     }
 
-    &.open {
+    &.mobileMenuOpen {
         opacity: 1;
         pointer-events: all;
         transform: translateY(0);

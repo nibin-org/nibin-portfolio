@@ -5,16 +5,16 @@ import styles from './Skills.module.scss';
 
 const SKILL_GROUPS = [
     {
-        category: 'Core Frontend',
-        skills: ['HTML5', 'CSS3', 'SASS/SCSS', 'TailwindCSS', 'Next.js', 'GSAP'],
+        category: 'Markup & Styling',
+        skills: ['HTML5', 'CSS3', 'SASS/SCSS', 'TailwindCSS', 'GSAP', 'AOS', 'Swiper.js'],
     },
     {
-        category: 'Design & UI',
-        skills: ['Figma', 'Storybook', 'Component Libraries', 'Visual Excellence'],
+        category: 'UI Development',
+        skills: ['React.js', 'Next.js', 'TypeScript', 'Component Architecture'],
     },
     {
-        category: 'Workflow & Tools',
-        skills: ['Git', 'GitHub', 'Lighthouse optimization', 'Vercel', 'UI Architecture'],
+        category: 'Design Systems',
+        skills: ['Figma', 'Figma Design Tokens', 'Token-driven Architecture', 'Storybook', 'Component Libraries'],
     },
 ];
 
@@ -34,29 +34,27 @@ export default function Skills() {
             gsap.registerPlugin(ScrollTrigger);
 
             const ctx = gsap.context(() => {
-                gsap.from('[data-skill-category]', {
-                    y: 40,
-                    opacity: 0,
-                    duration: 0.8,
-                    stagger: 0.2,
-                    ease: 'power3.out',
+                const tl = gsap.timeline({
                     scrollTrigger: {
                         trigger: sectionRef.current,
-                        start: 'top 80%',
+                        start: 'top 85%',
                     },
                 });
 
-                gsap.from('[data-skill-badge]', {
-                    scale: 0.9,
+                tl.from('[data-skill-reveal]', {
+                    y: 30,
                     opacity: 0,
-                    duration: 0.5,
-                    stagger: 0.05,
-                    ease: 'back.out(1.7)',
-                    scrollTrigger: {
-                        trigger: sectionRef.current,
-                        start: 'top 70%',
-                    },
-                });
+                    duration: 0.6,
+                    stagger: 0.1,
+                    ease: 'power3.out',
+                })
+                    .from('[data-skill-badge]', {
+                        scale: 0.8,
+                        opacity: 0,
+                        duration: 0.4,
+                        stagger: 0.02,
+                        ease: 'back.out(1.7)',
+                    }, '-=0.4');
             }, sectionRef);
 
             return () => ctx.revert();
@@ -68,20 +66,22 @@ export default function Skills() {
     return (
         <section id="skills" className={styles.skills} ref={sectionRef}>
             <div className={styles.container}>
-                <div className="section-label" data-skill-category>Expertise</div>
-                <h2 className="section-title" data-skill-category>Technologies & Skills</h2>
-                <p className="section-subtitle" data-skill-category>
+                <div className="section-label" data-skill-reveal>Expertise</div>
+                <h2 className="section-title" data-skill-reveal>Technologies & Skills</h2>
+                <p className="section-subtitle" data-skill-reveal>
                     A snapshot of the tools and technologies I use to bring modern, scalable, and high-performance user interfaces to life.
                 </p>
 
                 <div className={styles.grid}>
                     {SKILL_GROUPS.map((group) => (
-                        <div key={group.category} className={styles.category} data-skill-category>
+                        <div key={group.category} className={styles.category} data-skill-reveal>
                             <h3 className={styles.categoryTitle}>{group.category}</h3>
                             <div className={styles.skillList}>
                                 {group.skills.map((skill) => (
                                     <div key={skill} className={styles.skillBadge} data-skill-badge>
-                                        <CheckIcon />
+                                        <div className={styles.skillBadge__icon} aria-hidden="true">
+                                            <CheckIcon />
+                                        </div>
                                         {skill}
                                     </div>
                                 ))}

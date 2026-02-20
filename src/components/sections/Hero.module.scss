@@ -144,21 +144,34 @@
     font-weight: $fw-medium;
     color: var(--color-text-muted);
     letter-spacing: -0.01em;
+    min-height: 1.5em; // Stable height for typing
 
     @include lg {
         font-size: $text-xl;
     }
 
-    .divider {
-        display: inline-block;
-        width: 4px;
-        height: 4px;
-        border-radius: $radius-full;
-        background: var(--color-border);
-    }
-
     .highlight {
         color: var(--color-accent);
+        position: relative;
+
+        &::after {
+            content: '|';
+            margin-left: 2px;
+            color: var(--color-accent);
+            animation: cursorBlink 1s step-end infinite;
+        }
+    }
+}
+
+@keyframes cursorBlink {
+
+    from,
+    to {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
     }
 }
 

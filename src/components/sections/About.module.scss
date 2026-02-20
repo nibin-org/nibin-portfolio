@@ -4,20 +4,24 @@
 .about {
     @include section-base;
     background: var(--color-bg);
+    position: relative;
+    overflow: hidden;
 }
 
 .container {
     @include container;
+    position: relative;
+    z-index: 2;
 }
 
 .content {
     display: grid;
     grid-template-columns: 1fr;
-    gap: $space-12;
-    align-items: flex-start;
+    gap: $space-16;
+    align-items: center;
 
     @include lg {
-        grid-template-columns: 1.2fr 0.8fr;
+        grid-template-columns: 1fr 1fr;
         gap: $space-24;
     }
 }
@@ -29,12 +33,12 @@
 }
 
 .bio {
-    font-size: $text-lg;
+    font-size: $text-base;
     line-height: $lh-relaxed;
     color: var(--color-text-muted);
 
     @include lg {
-        font-size: $text-xl;
+        font-size: $text-lg;
     }
 
     p+p {
@@ -54,20 +58,65 @@
 
 .statGrid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: $space-4;
+    margin-top: $space-4; // Tighter spacing to bio
 
     @include sm {
+        grid-template-columns: repeat(2, 1fr);
         gap: $space-6;
     }
 }
 
 .statCard {
     @include card-base;
-    padding: $space-6;
+    padding: $space-5 $space-6;
     display: flex;
-    flex-direction: column;
-    gap: $space-2;
+    align-items: center;
+    gap: $space-5;
+    position: relative;
+    overflow: hidden;
+    transition:
+        border-color $transition-normal,
+        transform $transition-normal,
+        background-color $transition-normal;
+
+    &:hover {
+        border-color: var(--color-accent);
+        transform: translateY(-4px);
+        background: $color-accent-glow;
+
+        .statCard__glow {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+
+    &__icon {
+        @include flex-center;
+        width: 48px;
+        height: 48px;
+        flex-shrink: 0;
+        border-radius: $radius-lg;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        color: var(--color-accent);
+        position: relative;
+        z-index: 1;
+
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        gap: $space-1;
+        position: relative;
+        z-index: 1;
+    }
 
     &__label {
         font-size: $text-xs;
@@ -78,39 +127,158 @@
     }
 
     &__value {
-        font-size: $text-2xl;
+        font-size: $text-lg;
         font-weight: $fw-bold;
         color: var(--color-text);
-        letter-spacing: -0.02em;
+        letter-spacing: -0.01em;
+    }
+
+    &__glow {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 150px;
+        height: 150px;
+        background: radial-gradient(circle, rgba($color-accent, 0.15) 0%, transparent 70%);
+        opacity: 0;
+        pointer-events: none;
+        transform: translate(-50%, -50%) scale(0.5);
+        transition: opacity 0.5s ease, transform 0.5s ease;
     }
 }
 
-.imageSide {
+/* Visual Side: Terminal & Orbs */
+.visualSide {
     position: relative;
-    aspect-ratio: 1;
+    perspective: 1000px;
+}
+
+.meshContainer {
+    position: absolute;
+    inset: -50px;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.orb {
+    position: absolute;
+    border-radius: $radius-full;
+    filter: blur(40px);
+    opacity: 0.4;
+    mix-blend-mode: plus-lighter;
+
+    &1 {
+        width: 200px;
+        height: 200px;
+        background: radial-gradient($color-accent, transparent);
+        top: 10%;
+        left: 20%;
+    }
+
+    &2 {
+        width: 150px;
+        height: 150px;
+        background: radial-gradient($color-accent-pink, transparent);
+        bottom: 20%;
+        right: 15%;
+    }
+
+    &3 {
+        width: 120px;
+        height: 120px;
+        background: radial-gradient($color-accent-blue, transparent);
+        top: 40%;
+        right: 40%;
+    }
+}
+
+.terminalWrapper {
+    position: relative;
+    padding: $space-4;
+    transform-style: preserve-3d;
+}
+
+.terminal {
+    background: rgba(13, 17, 23, 0.7);
+    backdrop-filter: blur(20px);
     border-radius: $radius-xl;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     overflow: hidden;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.4),
+        0 10px 20px rgba(0, 0, 0, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    transform-style: preserve-3d;
+}
+
+.terminalHeader {
+    background: rgba(22, 27, 34, 0.8);
+    padding: $space-3 $space-6;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
 
-    &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle at 50% 50%, $color-accent-glow 0%, transparent 70%);
-        opacity: 0.5;
+.terminalDots {
+    display: flex;
+    gap: $space-2;
+
+    span {
+        width: 10px;
+        height: 10px;
+        border-radius: $radius-full;
+
+        &:nth-child(1) {
+            background: #ff5f56;
+        }
+
+        &:nth-child(2) {
+            background: #ffbd2e;
+        }
+
+        &:nth-child(3) {
+            background: #27c93f;
+        }
     }
 }
 
-.placeholderCode {
+.terminalTitle {
     font-family: $font-mono;
     font-size: $text-xs;
-    color: var(--color-accent);
-    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.05em;
+}
+
+.terminalBody {
     padding: $space-8;
-    z-index: 1;
-    opacity: 0.8;
+}
+
+.code {
+    font-family: $font-mono;
+    font-size: $text-sm;
+    line-height: 1.7;
+    color: #e6edf3;
+    margin: 0;
+}
+
+.terminalGlow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba($color-accent, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+/* Syntax Highlighting */
+.tokenKw {
+    color: #ff7b72;
+    font-weight: $fw-semibold;
+}
+
+.tokenStr {
+    color: #a5d6ff;
+}
+
+.tokenNum {
+    color: #d2a8ff;
 }

@@ -57,12 +57,11 @@
     color: var(--color-text);
     font-size: $text-sm;
     font-weight: $fw-medium;
-    transition: all $transition-normal;
 
     &:hover {
         border-color: var(--color-accent);
         background: $color-accent-glow;
-        transform: translateY(-2px);
+        transform: translateY(-2px) !important; // override GSAP transform if needed for hover
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 

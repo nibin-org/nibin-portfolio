@@ -28,9 +28,9 @@ const GithubIcon = () => (
 );
 
 const SOCIAL_LINKS = [
-    { label: 'Email', icon: <MailIcon />, href: 'mailto:nibhinkurian@example.com' },
-    { label: 'LinkedIn', icon: <LinkedinIcon />, href: '#' },
-    { label: 'GitHub', icon: <GithubIcon />, href: '#' },
+    { label: 'Email', icon: <MailIcon />, href: 'mailto:nibin.lab.99@gmail.com' },
+    { label: 'LinkedIn', icon: <LinkedinIcon />, href: 'https://linkedin.com/in/nibin-kurian' },
+    { label: 'GitHub', icon: <GithubIcon />, href: 'https://github.com/nibin-org' },
 ];
 
 export default function Contact() {
@@ -77,8 +77,15 @@ export default function Contact() {
 
                 <div className={styles.socialGrid} data-contact-reveal>
                     {SOCIAL_LINKS.map((link) => (
-                        <a key={link.label} href={link.href} className={styles.linkCard}>
-                            {link.icon}
+                        <a
+                            key={link.label}
+                            href={link.href}
+                            className={styles.linkCard}
+                            target={link.label !== 'Email' ? "_blank" : undefined}
+                            rel={link.label !== 'Email' ? "noopener noreferrer" : undefined}
+                            aria-label={`Visit my ${link.label}`}
+                        >
+                            <span className={styles.linkCard__icon} aria-hidden="true">{link.icon}</span>
                             {link.label}
                         </a>
                     ))}
@@ -94,7 +101,7 @@ export default function Contact() {
                             Kottayam, Kerala, India
                         </div>
 
-                        <div className={styles.footerLinks}>
+                        <div className={styles.footerLinks} role="navigation" aria-label="Footer Navigation">
                             <a href="#about" className={styles.footerLink}>About</a>
                             <a href="#skills" className={styles.footerLink}>Skills</a>
                             <a href="#projects" className={styles.footerLink}>Work</a>
