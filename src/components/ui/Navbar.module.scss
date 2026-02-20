@@ -1,0 +1,293 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: $space-4 0;
+    background: var(--navbar-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid transparent;
+    transition:
+        border-color $transition-normal,
+        padding $transition-normal,
+        background $transition-normal;
+
+    &.scrolled {
+        border-bottom-color: var(--color-border);
+        padding: $space-3 0;
+    }
+}
+
+.inner {
+    @include container;
+    @include flex-between;
+}
+
+// ─── Logo ─────────────────────────────────────
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    text-decoration: none;
+
+    &__mark {
+        width: 36px;
+        height: 36px;
+        border-radius: $radius-md;
+        background: var(--color-accent);
+        @include flex-center;
+        font-size: $text-sm;
+        font-weight: $fw-black;
+        color: #0a0f1e;
+        letter-spacing: -0.05em;
+        font-family: $font-primary;
+        flex-shrink: 0;
+        transition: box-shadow $transition-normal;
+
+        [data-theme='light'] & {
+            color: #fff;
+        }
+    }
+
+    &__name {
+        font-size: $text-sm;
+        font-weight: $fw-semibold;
+        color: var(--color-text);
+        letter-spacing: -0.01em;
+        transition: color $transition-normal;
+
+        span {
+            display: block;
+            font-size: $text-xs;
+            font-weight: $fw-regular;
+            color: var(--color-text-muted);
+            letter-spacing: 0;
+        }
+    }
+
+    &:hover .logo__mark {
+        box-shadow: 0 0 0 4px $color-accent-glow;
+    }
+}
+
+// ─── Nav links ────────────────────────────────
+
+.navLinks {
+    display: none;
+    align-items: center;
+    gap: $space-8;
+
+    @include lg {
+        display: flex;
+    }
+}
+
+.navLink {
+    font-size: $text-sm;
+    font-weight: $fw-medium;
+    color: var(--color-text-muted);
+    letter-spacing: 0.01em;
+    position: relative;
+    transition: color $transition-fast;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--color-accent);
+        border-radius: $radius-full;
+        transition: width $transition-normal;
+    }
+
+    &:hover,
+    &.active {
+        color: var(--color-text);
+
+        &::after {
+            width: 100%;
+        }
+    }
+}
+
+// ─── Actions ──────────────────────────────────
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+}
+
+.themeToggle {
+    width: 38px;
+    height: 38px;
+    border-radius: $radius-md;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    @include flex-center;
+    color: var(--color-text-muted);
+    transition:
+        border-color $transition-fast,
+        color $transition-fast,
+        background $transition-fast,
+        transform $transition-fast;
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    &:hover {
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+        background: $color-accent-glow;
+        transform: rotate(15deg);
+    }
+}
+
+.ctaBtn {
+    display: none;
+    padding: $space-2 $space-5;
+    border-radius: $radius-md;
+    border: 1px solid var(--color-accent);
+    background: $color-accent-glow;
+    color: var(--color-accent);
+    font-size: $text-sm;
+    font-weight: $fw-semibold;
+    transition:
+        background $transition-fast,
+        color $transition-fast,
+        transform $transition-fast;
+
+    @include lg {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    &:hover {
+        background: var(--color-accent);
+        color: #0a0f1e;
+        transform: translateY(-1px);
+    }
+}
+
+// ─── Mobile menu ──────────────────────────────
+
+.mobileMenuBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: $radius-md;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+    transition: border-color $transition-fast, color $transition-fast;
+
+    @include lg {
+        display: none;
+    }
+
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    &:hover {
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+    }
+}
+
+.mobileMenu {
+    // Full-screen overlay
+    position: fixed;
+    inset: 0;
+    z-index: 99; // just below navbar (z-index: 100)
+    width: 100%;
+    height: 100vh;
+    background: var(--color-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $space-2;
+    padding: $space-24 $space-6 $space-16;
+
+    // Hidden state — fade + slide up
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-12px);
+    transition:
+        opacity $transition-slow,
+        transform $transition-slow;
+
+    // Always hide on desktop
+    @include lg {
+        display: none !important;
+    }
+
+    &.open {
+        opacity: 1;
+        pointer-events: all;
+        transform: translateY(0);
+    }
+}
+
+.mobileNavLink {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: $space-5 $space-6;
+    font-size: $text-3xl;
+    font-weight: $fw-bold;
+    color: var(--color-text-muted);
+    letter-spacing: -0.02em;
+    border-radius: $radius-lg;
+    transition:
+        color $transition-fast,
+        background $transition-fast,
+        transform $transition-fast;
+
+    &:hover {
+        color: var(--color-accent);
+        background: $color-accent-glow;
+        transform: scale(1.03);
+    }
+}
+
+.mobileMenuFooter {
+    position: absolute;
+    bottom: $space-12;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-4;
+
+    a {
+        padding: $space-3 $space-10;
+        border-radius: $radius-md;
+        border: 1px solid var(--color-accent);
+        background: $color-accent-glow;
+        color: var(--color-accent);
+        font-size: $text-base;
+        font-weight: $fw-semibold;
+        transition: background $transition-fast, color $transition-fast;
+
+        &:hover {
+            background: var(--color-accent);
+            color: #0a0f1e;
+        }
+    }
+}

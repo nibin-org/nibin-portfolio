@@ -1,0 +1,113 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.contact {
+    @include section-base;
+    padding-bottom: $space-12; // less padding at bottom since footer follows
+    position: relative;
+    background: var(--color-bg);
+}
+
+.container {
+    @include container;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-8;
+}
+
+.headline {
+    @include heading-display;
+    max-width: 800px;
+
+    .accent {
+        @include text-gradient;
+    }
+}
+
+.socialGrid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: $space-4;
+    margin-top: $space-4;
+}
+
+.linkCard {
+    @include card-base;
+    padding: $space-6 $space-10;
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    font-size: $text-lg;
+    font-weight: $fw-semibold;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: all $transition-normal;
+
+    @include sm {
+        padding: $space-8 $space-12;
+    }
+
+    svg {
+        width: 24px;
+        height: 24px;
+        color: var(--color-accent);
+    }
+
+    &:hover {
+        background: $color-accent-glow;
+        border-color: var(--color-accent);
+    }
+}
+
+.footer {
+    margin-top: $space-32;
+    padding: $space-12 0;
+    border-top: 1px solid var(--color-border);
+    width: 100%;
+}
+
+.footerInner {
+    @include container;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-6;
+
+    @include md {
+        flex-direction: row;
+    }
+}
+
+.copyright {
+    font-size: $text-sm;
+    color: var(--color-text-muted);
+}
+
+.footerLinks {
+    display: flex;
+    gap: $space-8;
+}
+
+.footerLink {
+    font-size: $text-sm;
+    font-weight: $fw-medium;
+    color: var(--color-text-muted);
+    transition: color $transition-fast;
+
+    &:hover {
+        color: var(--color-accent);
+    }
+}
+
+.kottayam {
+    font-size: $text-xs;
+    font-weight: $fw-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    opacity: 0.6;
+}

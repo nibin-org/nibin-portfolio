@@ -1,0 +1,343 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// ─────────────────────────────────────────────
+// Hero Section
+// ─────────────────────────────────────────────
+
+.hero {
+    position: relative;
+    min-height: 100vh;
+    @include flex-center;
+    flex-direction: column;
+    overflow: hidden;
+    padding-top: 80px; // navbar offset
+}
+
+// ─── Background grid/noise texture ────────────
+
+.bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+
+    // Subtle dot grid
+    background-image: radial-gradient(circle,
+            var(--color-border) 1px,
+            transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.4;
+
+    // Gradient mask — fades out at edges
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 50%,
+            black 40%,
+            transparent 100%);
+}
+
+// Ambient glow blob
+.glow {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: $radius-full;
+    filter: blur(100px);
+    opacity: 0.12;
+
+    &--primary {
+        width: 600px;
+        height: 600px;
+        background: $color-accent;
+        top: -10%;
+        right: -10%;
+    }
+
+    &--secondary {
+        width: 400px;
+        height: 400px;
+        background: #818cf8; // indigo
+        bottom: 0;
+        left: -10%;
+        opacity: 0.07;
+    }
+}
+
+// ─── Content ──────────────────────────────────
+
+.content {
+    @include container;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $space-6;
+    padding-top: $space-16;
+    padding-bottom: $space-16;
+
+    @include lg {
+        padding-top: $space-20;
+        padding-bottom: $space-20;
+    }
+}
+
+// ─── Status badge ─────────────────────────────
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-4;
+    border-radius: $radius-full;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    font-size: $text-xs;
+    font-weight: $fw-medium;
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em;
+
+    .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: $radius-full;
+        background: #4ade80; // green
+        flex-shrink: 0;
+        animation: pulse 2.5s ease-in-out infinite;
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(0.85);
+    }
+}
+
+// ─── Name heading ─────────────────────────────
+
+.name {
+    @include heading-display;
+    color: var(--color-text);
+    max-width: 900px;
+    position: relative;
+
+    .accent {
+        @include text-gradient;
+    }
+}
+
+// ─── Title line ───────────────────────────────
+
+.title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $space-2;
+    font-size: $text-lg;
+    font-weight: $fw-medium;
+    color: var(--color-text-muted);
+    letter-spacing: -0.01em;
+
+    @include lg {
+        font-size: $text-xl;
+    }
+
+    .divider {
+        display: inline-block;
+        width: 4px;
+        height: 4px;
+        border-radius: $radius-full;
+        background: var(--color-border);
+    }
+
+    .highlight {
+        color: var(--color-accent);
+    }
+}
+
+// ─── Tagline ──────────────────────────────────
+
+.tagline {
+    font-size: $text-base;
+    line-height: $lh-relaxed;
+    color: var(--color-text-muted);
+    max-width: 520px;
+    border-left: 2px solid var(--color-accent);
+    padding-left: $space-4;
+
+    @include lg {
+        font-size: $text-lg;
+    }
+}
+
+// ─── CTA Buttons ──────────────────────────────
+
+.cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-4;
+    margin-top: $space-2;
+}
+
+.btnPrimary {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-3 $space-8;
+    border-radius: $radius-md;
+    background: var(--color-accent);
+    color: #0a0f1e;
+    font-size: $text-base;
+    font-weight: $fw-semibold;
+    letter-spacing: -0.01em;
+    transition:
+        transform $transition-fast,
+        box-shadow $transition-fast,
+        background $transition-fast;
+
+    svg {
+        width: 18px;
+        height: 18px;
+        transition: transform $transition-fast;
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px $color-accent-glow, 0 0 0 1px $color-accent;
+
+        svg {
+            transform: translateX(4px);
+        }
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+.btnGhost {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-3 $space-8;
+    border-radius: $radius-md;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text);
+    font-size: $text-base;
+    font-weight: $fw-medium;
+    letter-spacing: -0.01em;
+    transition:
+        border-color $transition-fast,
+        color $transition-fast,
+        background $transition-fast,
+        transform $transition-fast;
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    &:hover {
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+        background: $color-accent-glow;
+        transform: translateY(-2px);
+    }
+}
+
+// ─── Scroll hint ─────────────────────────────
+
+.scrollHint {
+    position: absolute;
+    bottom: $space-10;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-2;
+    z-index: 1;
+
+    span {
+        font-size: $text-xs;
+        color: var(--color-text-muted);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    .mouse {
+        width: 22px;
+        height: 34px;
+        border-radius: $radius-full;
+        border: 2px solid var(--color-border);
+        position: relative;
+        @include flex-center;
+
+        &::after {
+            content: '';
+            width: 3px;
+            height: 6px;
+            background: var(--color-accent);
+            border-radius: $radius-full;
+            animation: scrollBob 1.8s ease-in-out infinite;
+        }
+    }
+}
+
+@keyframes scrollBob {
+    0% {
+        transform: translateY(-3px);
+        opacity: 0;
+    }
+
+    40% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(6px);
+        opacity: 0;
+    }
+}
+
+// ─── Stats row ────────────────────────────────
+
+.stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-8;
+    margin-top: $space-8;
+    padding-top: $space-8;
+    border-top: 1px solid var(--color-border);
+    width: 100%;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+
+    &__number {
+        font-size: $text-3xl;
+        font-weight: $fw-black;
+        color: var(--color-text);
+        letter-spacing: -0.04em;
+        line-height: 1;
+
+        @include text-gradient;
+    }
+
+    &__label {
+        font-size: $text-sm;
+        color: var(--color-text-muted);
+        font-weight: $fw-medium;
+    }
+}

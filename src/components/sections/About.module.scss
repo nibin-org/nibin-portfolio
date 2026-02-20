@@ -1,0 +1,116 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.about {
+    @include section-base;
+    background: var(--color-bg);
+}
+
+.container {
+    @include container;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-12;
+    align-items: flex-start;
+
+    @include lg {
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: $space-24;
+    }
+}
+
+.textSide {
+    display: flex;
+    flex-direction: column;
+    gap: $space-6;
+}
+
+.bio {
+    font-size: $text-lg;
+    line-height: $lh-relaxed;
+    color: var(--color-text-muted);
+
+    @include lg {
+        font-size: $text-xl;
+    }
+
+    p+p {
+        margin-top: $space-6;
+    }
+
+    strong {
+        color: var(--color-text);
+        font-weight: $fw-semibold;
+    }
+}
+
+.highlight {
+    color: var(--color-accent);
+    font-weight: $fw-semibold;
+}
+
+.statGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-4;
+
+    @include sm {
+        gap: $space-6;
+    }
+}
+
+.statCard {
+    @include card-base;
+    padding: $space-6;
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+
+    &__label {
+        font-size: $text-xs;
+        font-weight: $fw-semibold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--color-text-muted);
+    }
+
+    &__value {
+        font-size: $text-2xl;
+        font-weight: $fw-bold;
+        color: var(--color-text);
+        letter-spacing: -0.02em;
+    }
+}
+
+.imageSide {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: $radius-xl;
+    overflow: hidden;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 50% 50%, $color-accent-glow 0%, transparent 70%);
+        opacity: 0.5;
+    }
+}
+
+.placeholderCode {
+    font-family: $font-mono;
+    font-size: $text-xs;
+    color: var(--color-accent);
+    line-height: 1.6;
+    padding: $space-8;
+    z-index: 1;
+    opacity: 0.8;
+}

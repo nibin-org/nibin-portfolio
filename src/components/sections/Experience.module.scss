@@ -1,0 +1,123 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.experience {
+    @include section-base;
+    background: var(--color-bg);
+}
+
+.container {
+    @include container;
+}
+
+.timeline {
+    position: relative;
+    max-width: 800px;
+    margin: $space-12 0 0 $space-4;
+    padding-left: $space-8;
+    border-left: 2px solid var(--color-border);
+
+    @include md {
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: $space-12;
+    }
+}
+
+.item {
+    position: relative;
+    margin-bottom: $space-16;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    // Dot on the line
+    &::before {
+        content: '';
+        position: absolute;
+        left: calc(-1 * #{$space-8} - 9px);
+        top: 0;
+        width: 16px;
+        height: 16px;
+        border-radius: $radius-full;
+        background: var(--color-bg);
+        border: 2px solid var(--color-accent);
+        z-index: 1;
+
+        @include md {
+            left: calc(-1 * #{$space-12} - 9px);
+        }
+    }
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+    margin-bottom: $space-4;
+}
+
+.role {
+    font-size: $text-xl;
+    font-weight: $fw-bold;
+    color: var(--color-text);
+    letter-spacing: -0.01em;
+}
+
+.company {
+    font-size: $text-base;
+    font-weight: $fw-medium;
+    color: var(--color-accent);
+}
+
+.period {
+    font-size: $text-xs;
+    font-weight: $fw-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+}
+
+.description {
+    font-size: $text-base;
+    line-height: $lh-relaxed;
+    color: var(--color-text-muted);
+
+    ul {
+        margin-top: $space-3;
+        display: flex;
+        flex-direction: column;
+        gap: $space-2;
+    }
+
+    li {
+        position: relative;
+        padding-left: $space-5;
+
+        &::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--color-accent);
+            font-weight: $fw-bold;
+        }
+    }
+}
+
+.techStack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-2;
+    margin-top: $space-6;
+}
+
+.techTag {
+    font-size: $text-xs;
+    font-weight: $fw-semibold;
+    color: var(--color-text-muted);
+    padding: $space-1 $space-3;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: $radius-sm;
+}

@@ -1,0 +1,118 @@
+@use 'variables' as *;
+
+// ─────────────────────────────────────────────
+// Breakpoint Mixins
+// ─────────────────────────────────────────────
+
+@mixin sm {
+    @media (min-width: #{$bp-sm}) {
+        @content;
+    }
+}
+
+@mixin md {
+    @media (min-width: #{$bp-md}) {
+        @content;
+    }
+}
+
+@mixin lg {
+    @media (min-width: #{$bp-lg}) {
+        @content;
+    }
+}
+
+@mixin xl {
+    @media (min-width: #{$bp-xl}) {
+        @content;
+    }
+}
+
+// ─────────────────────────────────────────────
+// Layout Mixins
+// ─────────────────────────────────────────────
+
+@mixin container {
+    width: 100%;
+    max-width: $max-width;
+    margin-inline: auto;
+    padding-inline: $space-6;
+
+    @include lg {
+        padding-inline: $space-8;
+    }
+}
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@mixin section-base {
+    padding: $space-20 0;
+
+    @include lg {
+        padding: $space-32 0;
+    }
+}
+
+// ─────────────────────────────────────────────
+// Typography Mixins
+// ─────────────────────────────────────────────
+
+@mixin heading-display {
+    font-size: $text-5xl;
+    font-weight: $fw-black;
+    line-height: $lh-tight;
+    letter-spacing: -0.03em;
+
+    @include lg {
+        font-size: $text-7xl;
+    }
+}
+
+@mixin heading-section {
+    font-size: $text-3xl;
+    font-weight: $fw-bold;
+    line-height: $lh-tight;
+    letter-spacing: -0.02em;
+
+    @include lg {
+        font-size: $text-4xl;
+    }
+}
+
+@mixin text-gradient {
+    background: linear-gradient(135deg, $color-accent 0%, $color-accent-hover 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+// ─────────────────────────────────────────────
+// Effect Mixins
+// ─────────────────────────────────────────────
+
+@mixin card-base {
+    border-radius: $radius-lg;
+    border: 1px solid var(--color-border);
+    background: var(--color-card);
+    transition: border-color $transition-normal, transform $transition-normal, box-shadow $transition-normal;
+
+    &:hover {
+        border-color: var(--color-accent);
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px $color-accent-glow;
+    }
+}
+
+@mixin accent-glow {
+    box-shadow: 0 0 20px $color-accent-glow, 0 0 40px $color-accent-glow;
+}

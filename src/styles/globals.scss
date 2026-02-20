@@ -1,0 +1,178 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// ─────────────────────────────────────────────
+// CSS Custom Properties (theme-aware)
+// ─────────────────────────────────────────────
+
+:root {
+    --color-bg: #{$color-bg-dark};
+    --color-surface: #{$color-surface-dark};
+    --color-card: #{$color-card-dark};
+    --color-border: #{$color-border-dark};
+    --color-text: #{$color-text-primary-dark};
+    --color-text-muted: #{$color-text-secondary-dark};
+    --color-accent: #{$color-accent};
+    --color-accent-glow: #{$color-accent-glow};
+    --navbar-bg: rgba(10, 15, 30, 0.8);
+}
+
+[data-theme='light'] {
+    --color-bg: #{$color-bg-light};
+    --color-surface: #{$color-surface-light};
+    --color-card: #{$color-card-light};
+    --color-border: #{$color-border-light};
+    --color-text: #{$color-text-primary-light};
+    --color-text-muted: #{$color-text-secondary-light};
+    --color-accent: #{$color-accent};
+    --color-accent-glow: #{$color-accent-glow};
+    --navbar-bg: rgba(244, 246, 251, 0.85);
+}
+
+// ─────────────────────────────────────────────
+// Reset & Base
+// ─────────────────────────────────────────────
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: $font-primary;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: $lh-normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color $transition-slow, color $transition-slow;
+    overflow-x: hidden;
+}
+
+img,
+video {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+}
+
+// ─────────────────────────────────────────────
+// Shared Layout
+// ─────────────────────────────────────────────
+
+.container {
+    @include container;
+}
+
+.section {
+    @include section-base;
+}
+
+// ─────────────────────────────────────────────
+// Section Label
+// ─────────────────────────────────────────────
+
+.section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    font-size: $text-xs;
+    font-weight: $fw-semibold;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: $space-4;
+
+    &::before {
+        content: '';
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: var(--color-accent);
+        border-radius: $radius-full;
+    }
+}
+
+.section-title {
+    @include heading-section;
+    color: var(--color-text);
+    margin-bottom: $space-4;
+}
+
+.section-subtitle {
+    font-size: $text-lg;
+    color: var(--color-text-muted);
+    line-height: $lh-relaxed;
+    max-width: 560px;
+}
+
+// ─────────────────────────────────────────────
+// Utility: visually hidden
+// ─────────────────────────────────────────────
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+// ─────────────────────────────────────────────
+// Scrollbar
+// ─────────────────────────────────────────────
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-surface);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: $radius-full;
+
+    &:hover {
+        background: var(--color-accent);
+    }
+}
+
+// ─────────────────────────────────────────────
+// Selection
+// ─────────────────────────────────────────────
+
+::selection {
+    background: $color-accent-glow;
+    color: $color-accent;
+}
