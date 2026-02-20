@@ -89,14 +89,16 @@ export default function About() {
                 window.addEventListener('resize', updateRect);
 
                 const handleMouseMove = (e: MouseEvent) => {
-                    if (!terminalRef.current || !terminalRect) return;
+                    if (!terminalRef.current || !terminalRect || window.innerWidth < 768) return;
 
                     const x = e.clientX - terminalRect.left;
                     const y = e.clientY - terminalRect.top;
                     const centerX = terminalRect.width / 2;
                     const centerY = terminalRect.height / 2;
-                    const rotateX = (y - centerY) / 20;
-                    const rotateY = (centerX - x) / 20;
+
+                    // Clamp rotation to ±10 degrees for subtle effect
+                    const rotateX = gsap.utils.clamp(-12, 12, (y - centerY) / 15);
+                    const rotateY = gsap.utils.clamp(-12, 12, (centerX - x) / 15);
 
                     gsap.to(terminalRef.current, {
                         rotateX: rotateX,
@@ -108,11 +110,13 @@ export default function About() {
                 };
 
                 const handleMouseLeave = () => {
+                    if (window.innerWidth < 768) return;
+
                     gsap.to(terminalRef.current, {
                         rotateX: 0,
                         rotateY: 0,
-                        duration: 0.8,
-                        ease: 'elastic.out(1, 0.3)'
+                        duration: 1,
+                        ease: 'elastic.out(1, 0.5)'
                     });
                 };
 
@@ -168,10 +172,6 @@ export default function About() {
                                 I specialize in <strong>Design Systems</strong> and <strong>token-driven UI architecture</strong>.
                                 My approach combines visual excellence from Figma with technical rigor, resulting in
                                 performant component libraries that improve project maintainability.
-                            </p>
-                            <p>
-                                I have a proven track record of optimizing frontend performance, successfully raising
-                                Lighthouse scores from <strong>60 to 95</strong> for large-scale applications.
                             </p>
                         </div>
 

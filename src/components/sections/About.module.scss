@@ -151,6 +151,10 @@
 .visualSide {
     position: relative;
     perspective: 1000px;
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .meshContainer {
@@ -196,6 +200,9 @@
     position: relative;
     padding: $space-4;
     transform-style: preserve-3d;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .terminal {
@@ -209,6 +216,7 @@
         0 10px 20px rgba(0, 0, 0, 0.2),
         inset 0 1px 1px rgba(255, 255, 255, 0.05);
     transform-style: preserve-3d;
+    max-width: 100%;
 }
 
 .terminalHeader {
@@ -251,7 +259,11 @@
 }
 
 .terminalBody {
-    padding: $space-8;
+    padding: $space-5;
+
+    @include md {
+        padding: $space-8;
+    }
 }
 
 .code {
@@ -260,6 +272,22 @@
     line-height: 1.7;
     color: #e6edf3;
     margin: 0;
+    overflow-x: auto;
+    white-space: pre;
+
+    // Custom scrollbar for better look
+    &::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba($color-accent, 0.2);
+        border-radius: $radius-full;
+    }
 }
 
 .terminalGlow {
