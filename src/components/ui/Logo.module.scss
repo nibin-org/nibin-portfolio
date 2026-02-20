@@ -60,7 +60,7 @@
     }
 }
 
-// Hover effects handled by parent containers (Navbar/Preloader)
+// Hover effects handled by parent container state (e.g. Navbar scroll state)
 :global(.scrolled) .logoContainer {
     transform: scale(0.9);
 }

@@ -70,15 +70,34 @@
     z-index: 1;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: $space-6;
-    padding-top: $space-16;
+    padding-top: $space-12;
     padding-bottom: $space-16;
 
     @include lg {
-        padding-top: $space-20;
+        padding-top: $space-16;
         padding-bottom: $space-20;
     }
+}
+
+.heroTop {
+    display: grid;
+    gap: $space-8;
+
+    @include lg {
+        grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+        align-items: start;
+        gap: $space-10;
+    }
+}
+
+.copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $space-6;
+    max-width: 740px;
 }
 
 // ─── Status badge ─────────────────────────────
@@ -125,7 +144,7 @@
 .name {
     @include heading-display;
     color: var(--color-text);
-    max-width: 900px;
+    max-width: 760px;
     position: relative;
 
     .accent {
@@ -181,7 +200,7 @@
     font-size: $text-base;
     line-height: $lh-relaxed;
     color: var(--color-text-muted);
-    max-width: 520px;
+    max-width: 620px;
     border-left: 2px solid var(--color-accent);
     padding-left: $space-4;
 
@@ -365,7 +384,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: $space-8;
-    margin-top: $space-8;
+    margin-top: $space-6;
     padding-top: $space-8;
     border-top: 1px solid var(--color-border);
     width: 100%;
@@ -377,18 +396,75 @@
     gap: $space-1;
 
     &__number {
-        font-size: $text-3xl;
+        font-size: $text-4xl;
         font-weight: $fw-black;
         color: var(--color-text);
         letter-spacing: -0.04em;
         line-height: 1;
 
+        @include lg {
+            font-size: $text-5xl;
+        }
+
         @include text-gradient;
     }
 
     &__label {
-        font-size: $text-sm;
+        font-size: $text-base;
         color: var(--color-text-muted);
         font-weight: $fw-medium;
+    }
+}
+
+.sidePanel {
+    display: none;
+    border-radius: $radius-lg;
+    border: 1px solid var(--color-border);
+    background:
+        linear-gradient(150deg, rgba(56, 189, 248, 0.14) 0%, rgba(56, 189, 248, 0.02) 45%, transparent 100%),
+        var(--color-surface);
+    padding: $space-6;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+
+    @include lg {
+        display: block;
+    }
+
+    &__eyebrow {
+        font-size: $text-xs;
+        color: var(--color-accent);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: $fw-semibold;
+        margin-bottom: $space-3;
+    }
+
+    &__title {
+        font-size: $text-2xl;
+        font-weight: $fw-bold;
+        line-height: $lh-snug;
+        color: var(--color-text);
+        letter-spacing: -0.02em;
+        margin-bottom: $space-5;
+        max-width: 18ch;
+    }
+
+    &__list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: $space-3;
+    }
+
+    &__item {
+        border: 1px solid var(--color-border);
+        border-radius: $radius-md;
+        background: rgba(255, 255, 255, 0.02);
+        padding: $space-3;
+        font-size: $text-sm;
+        font-weight: $fw-medium;
+        color: var(--color-text);
+        line-height: $lh-snug;
     }
 }

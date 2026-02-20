@@ -33,23 +33,32 @@ const FileIcon = () => (
 const ROLES = ['Frontend Developer', 'UI Engineer', 'Design System Architect'];
 
 const STATS = [
-    { number: '5.6+', label: 'Years Experience' },
-    { number: '80+', label: 'Projects Delivered' },
-    { number: '95+', label: 'Lighthouse Score' },
+    { value: 5.6, decimals: 1, suffix: '+', label: 'Years Experience' },
+    { value: 80, decimals: 0, suffix: '+', label: 'Projects Delivered' },
+    { value: 95, decimals: 0, suffix: '+', label: 'Lighthouse Score' },
+];
+
+const FOCUS_AREAS = [
+    'Design Systems',
+    'Token Architecture',
+    'Component Libraries',
+    'Frontend Performance',
 ];
 
 export default function Hero() {
     const sectionRef = useRef<HTMLElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
-    const roleRef = useRef<HTMLSpanElement>(null);
+    const statsRef = useRef<HTMLDivElement>(null);
     const [resumeOpen, setResumeOpen] = useState(false);
+    const [roleText, setRoleText] = useState(ROLES[0]);
+    const [statValues, setStatValues] = useState([0, 0, 0]);
     const handleResumeClose = useCallback(() => setResumeOpen(false), []);
 
     useEffect(() => {
+        let cleanup: (() => void) | undefined;
+
         const initGsap = async () => {
             const { gsap } = await import('gsap');
-            const { TextPlugin } = await import('gsap/TextPlugin');
-            gsap.registerPlugin(TextPlugin);
 
             const ctx = gsap.context(() => {
                 const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
@@ -60,32 +69,104 @@ export default function Hero() {
                     .from('[data-hero-title]', { y: 30, opacity: 0, duration: 0.6 }, '-=0.4')
                     .from('[data-hero-tagline]', { y: 20, opacity: 0, duration: 0.6 }, '-=0.4')
                     .from('[data-hero-cta]', { y: 20, opacity: 0, duration: 0.5 }, '-=0.4')
+                    .from('[data-hero-panel]', { x: 28, opacity: 0, duration: 0.6 }, '-=0.45')
                     .from('[data-hero-stats]', { y: 20, opacity: 0, duration: 0.5 }, '-=0.3')
                     .from('[data-scroll-hint]', { opacity: 0, duration: 0.6 }, '-=0.2');
-
-                // Typing Animation Loop
-                const roleTl = gsap.timeline({ repeat: -1 });
-
-                ROLES.forEach((role) => {
-                    roleTl.to(roleRef.current, {
-                        duration: 1.5,
-                        text: role,
-                        delay: 0.5,
-                        ease: "none"
-                    }).to(roleRef.current, {
-                        duration: 0.8,
-                        text: "",
-                        delay: 2, // Hold before backspacing
-                        ease: "none"
-                    });
-                });
             }, sectionRef);
 
-            return () => ctx.revert();
+            cleanup = () => ctx.revert();
         };
 
         initGsap();
+
+        return () => cleanup?.();
     }, []);
+
+    useEffect(() => {
+        let roleIndex = 0;
+        let charIndex = ROLES[0].length;
+        let isDeleting = false;
+        let timer: ReturnType<typeof setTimeout>;
+
+        const tick = () => {
+            const currentRole = ROLES[roleIndex];
+
+            if (isDeleting) {
+                charIndex -= 1;
+                setRoleText(currentRole.slice(0, Math.max(charIndex, 0)));
+
+                if (charIndex <= 0) {
+                    isDeleting = false;
+                    roleIndex = (roleIndex + 1) % ROLES.length;
+                    timer = setTimeout(tick, 250);
+                    return;
+                }
+
+                timer = setTimeout(tick, 45);
+                return;
+            }
+
+            const nextRole = ROLES[roleIndex];
+            charIndex += 1;
+            setRoleText(nextRole.slice(0, Math.min(charIndex, nextRole.length)));
+
+            if (charIndex >= nextRole.length) {
+                isDeleting = true;
+                timer = setTimeout(tick, 1400);
+                return;
+            }
+
+            timer = setTimeout(tick, 70);
+        };
+
+        // Keep first role visible briefly before looping.
+        timer = setTimeout(() => {
+            isDeleting = true;
+            tick();
+        }, 1200);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    useEffect(() => {
+        if (!statsRef.current) return;
+
+        const targets = STATS.map((stat) => stat.value);
+        const durationMs = 1400;
+        let rafId = 0;
+
+        const animate = () => {
+            const startedAt = performance.now();
+
+            const update = (time: number) => {
+                const progress = Math.min((time - startedAt) / durationMs, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+
+                setStatValues(targets.map((target) => target * eased));
+
+                if (progress < 1) {
+                    rafId = requestAnimationFrame(update);
+                }
+            };
+
+            rafId = requestAnimationFrame(update);
+        };
+
+        // Sync counter with hero entrance so numbers animate when visible.
+        setStatValues([0, 0, 0]);
+        const startTimer = setTimeout(animate, 1750);
+
+        return () => {
+            clearTimeout(startTimer);
+            if (rafId) cancelAnimationFrame(rafId);
+        };
+    }, []);
+
+    const formattedStats = STATS.map((stat, index) => {
+        const current = statValues[index] ?? 0;
+        const rounded = stat.decimals > 0 ? current.toFixed(stat.decimals) : `${Math.round(current)}`;
+        return `${rounded}${stat.suffix}`;
+    });
 
     return (
         <>
@@ -97,52 +178,65 @@ export default function Hero() {
 
                 {/* Main content */}
                 <div className={styles.content} ref={contentRef}>
+                    <div className={styles.heroTop}>
+                        <div className={styles.copy}>
+                            {/* Status badge */}
+                            <div className={styles.badge} data-hero-badge>
+                                <span className={styles.dot} />
+                                Available for new opportunities
+                            </div>
 
-                    {/* Status badge */}
-                    <div className={styles.badge} data-hero-badge>
-                        <span className={styles.dot} />
-                        Available for new opportunities
-                    </div>
+                            {/* Name */}
+                            <h1 className={styles.name} data-hero-name>
+                                Hi, I&apos;m{' '}
+                                <span className={styles.accent}>Nibin Kurian.</span>
+                            </h1>
 
-                    {/* Name */}
-                    <h1 className={styles.name} data-hero-name>
-                        Hi, I&apos;m{' '}
-                        <span className={styles.accent}>Nibin Kurian.</span>
-                    </h1>
+                            {/* Title with Typing Animation */}
+                            <p className={styles.title} data-hero-title>
+                                Professional <span className={styles.highlight}>{roleText}</span>
+                            </p>
 
-                    {/* Title with Typing Animation */}
-                    <p className={styles.title} data-hero-title>
-                        Professional <span className={styles.highlight} ref={roleRef}></span>
-                    </p>
+                            {/* Tagline */}
+                            <p className={styles.tagline} data-hero-tagline>
+                                Frontend Developer with 5.6+ years of experience building scalable web applications. Specialized in design systems, token-driven UI architecture, and reusable component libraries.
+                            </p>
 
-                    {/* Tagline */}
-                    <p className={styles.tagline} data-hero-tagline>
-                        Frontend Developer with 5.6+ years of experience building scalable web applications. Specialized in design systems, token-driven UI architecture, and reusable component libraries.
-                    </p>
+                            {/* CTA buttons */}
+                            <div className={styles.cta} data-hero-cta>
+                                <a href="#projects" className={styles.btnPrimary}>
+                                    View Work <ArrowRightIcon />
+                                </a>
+                                <a href="#contact" className={styles.btnGhost}>
+                                    Contact Me <MailIcon />
+                                </a>
+                                <button
+                                    className={styles.btnResume}
+                                    onClick={() => setResumeOpen(true)}
+                                    aria-label="View resume"
+                                >
+                                    <FileIcon />
+                                    View Resume
+                                </button>
+                            </div>
+                        </div>
 
-                    {/* CTA buttons */}
-                    <div className={styles.cta} data-hero-cta>
-                        <a href="#projects" className={styles.btnPrimary}>
-                            View Work <ArrowRightIcon />
-                        </a>
-                        <a href="#contact" className={styles.btnGhost}>
-                            Contact Me <MailIcon />
-                        </a>
-                        <button
-                            className={styles.btnResume}
-                            onClick={() => setResumeOpen(true)}
-                            aria-label="View resume"
-                        >
-                            <FileIcon />
-                            View Resume
-                        </button>
+                        <aside className={styles.sidePanel} data-hero-panel aria-hidden="true">
+                            <p className={styles.sidePanel__eyebrow}>Core Focus</p>
+                            <h2 className={styles.sidePanel__title}>Building UI systems that scale across products and teams.</h2>
+                            <ul className={styles.sidePanel__list} role="list">
+                                {FOCUS_AREAS.map((item) => (
+                                    <li key={item} className={styles.sidePanel__item}>{item}</li>
+                                ))}
+                            </ul>
+                        </aside>
                     </div>
 
                     {/* Stats */}
-                    <div className={styles.stats} data-hero-stats>
-                        {STATS.map(({ number, label }) => (
+                    <div className={styles.stats} data-hero-stats ref={statsRef}>
+                        {STATS.map(({ label }, index) => (
                             <div key={label} className={styles.stat}>
-                                <span className={styles.stat__number}>{number}</span>
+                                <span className={styles.stat__number}>{formattedStats[index]}</span>
                                 <span className={styles.stat__label}>{label}</span>
                             </div>
                         ))}
