@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styles from './Contact.module.scss';
+import Logo from '../ui/Logo';
 
 // Mail Icon
 const MailIcon = () => (
@@ -27,10 +28,18 @@ const GithubIcon = () => (
     </svg>
 );
 
+// Facebook Icon
+const FacebookIcon = () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+    </svg>
+);
+
 const SOCIAL_LINKS = [
     { label: 'Email', icon: <MailIcon />, href: 'mailto:nibin.lab.99@gmail.com' },
     { label: 'LinkedIn', icon: <LinkedinIcon />, href: 'https://linkedin.com/in/nibin-kurian' },
     { label: 'GitHub', icon: <GithubIcon />, href: 'https://github.com/nibin-org' },
+    { label: 'Facebook', icon: <FacebookIcon />, href: 'https://www.facebook.com/nibin.kurian.58' },
 ];
 
 export default function Contact() {
@@ -60,6 +69,27 @@ export default function Contact() {
         };
 
         initGsap();
+    }, []);
+
+    // Live Clock Logic
+    const [time, setTime] = useState<string>('');
+
+    useEffect(() => {
+        const updateTime = () => {
+            const now = new Date();
+            const options: Intl.DateTimeFormatOptions = {
+                timeZone: 'Asia/Kolkata',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+            };
+            setTime(new Intl.DateTimeFormat('en-US', options).format(now));
+        };
+
+        updateTime();
+        const interval = setInterval(updateTime, 1000); // Update every second
+        return () => clearInterval(interval);
     }, []);
 
     const currentYear = new Date().getFullYear();
@@ -92,20 +122,59 @@ export default function Contact() {
                 </div>
 
                 <footer className={styles.footer}>
-                    <div className={styles.footerInner}>
-                        <div className={styles.copyright}>
-                            © {currentYear} Nibin Kurian. Built with Next.js & SCSS.
+                    <div className={styles.footerGrid}>
+                        <div className={styles.brandColumn}>
+                            <Logo size="sm" className={styles.footerLogo} />
+                            <p className={styles.brandTagline}>
+                                Crafting technical excellence <br />
+                                and visual sophistication.
+                            </p>
                         </div>
 
-                        <div className={styles.kottayam}>
-                            Kottayam, Kerala, India
+                        <div className={styles.linksColumn}>
+                            <div className={styles.linkGroup}>
+                                <h4 className={styles.groupLabel}>Navigation</h4>
+                                <nav className={styles.navLinks}>
+                                    <a href="#about" className={styles.footerLink}>About</a>
+                                    <a href="#skills" className={styles.footerLink}>Skills</a>
+                                    <a href="#experience" className={styles.footerLink}>Experience</a>
+                                </nav>
+                            </div>
+                            <div className={styles.linkGroup}>
+                                <h4 className={styles.groupLabel}>Social</h4>
+                                <nav className={styles.socialIcons}>
+                                    {SOCIAL_LINKS.map(link => (
+                                        <a
+                                            key={link.label}
+                                            href={link.href}
+                                            className={styles.socialIconLink}
+                                            target={link.label !== 'Email' ? "_blank" : undefined}
+                                            rel={link.label !== 'Email' ? "noopener noreferrer" : undefined}
+                                            aria-label={link.label}
+                                            title={link.label}
+                                        >
+                                            {link.icon}
+                                        </a>
+                                    ))}
+                                </nav>
+                            </div>
                         </div>
 
-                        <div className={styles.footerLinks} role="navigation" aria-label="Footer Navigation">
-                            <a href="#about" className={styles.footerLink}>About</a>
-                            <a href="#skills" className={styles.footerLink}>Skills</a>
-                            <a href="#projects" className={styles.footerLink}>Work</a>
+                        <div className={styles.statusColumn}>
+                            <div className={styles.statusIndicator}>
+                                <span className={styles.statusDot}></span>
+                                Available for collaboration
+                            </div>
+                            <div className={styles.location}>
+                                {time && <span className={styles.time}>{time} IST • </span>}
+                                Kottayam, Kerala, India
+                            </div>
                         </div>
+                    </div>
+
+                    <div className={styles.footerBottom}>
+                        <p className={styles.copyright}>© {currentYear} Nibin Kurian. All rights reserved.</p>
+                        <p className={styles.techStack}>Built with Next.js, TypeScript & GSAP</p>
                     </div>
                 </footer>
             </div>

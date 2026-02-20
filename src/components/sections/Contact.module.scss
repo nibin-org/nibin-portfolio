@@ -64,49 +64,228 @@
 
 .footer {
     margin-top: $space-32;
-    padding: $space-12 0;
-    border-top: 1px solid var(--color-border);
+    padding-top: $space-20;
+    border-top: 1px solid transparent;
+    position: relative;
     width: 100%;
-}
 
-.footerInner {
-    @include container;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    gap: $space-6;
-
-    @include md {
-        flex-direction: row;
+    &::before {
+        content: '';
+        position: absolute;
+        top: -1px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(to right,
+                transparent,
+                var(--color-border) 20%,
+                var(--color-border) 80%,
+                transparent);
     }
 }
 
-.copyright {
-    font-size: $text-sm;
+.footerGrid {
+    @include container;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-12;
+    padding-bottom: $space-20;
+
+    @include md {
+        grid-template-columns: 1.5fr 2fr 1.6fr;
+        gap: $space-8;
+    }
+}
+
+.brandColumn {
+    display: flex;
+    flex-direction: column;
+    gap: $space-6;
+    text-align: left;
+}
+
+.footerLogo {
+    justify-content: flex-start !important;
+    opacity: 0.9;
+}
+
+.brandTagline {
+    font-size: $text-base;
+    line-height: $lh-snug;
+    color: var(--color-text-secondary);
+    font-weight: $fw-medium;
+    max-width: 240px;
+}
+
+.linksColumn {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-8;
+
+    @include sm {
+        gap: $space-16;
+    }
+}
+
+.linkGroup {
+    display: flex;
+    flex-direction: column;
+    gap: $space-6;
+    text-align: left;
+}
+
+.groupLabel {
+    font-size: $text-xs;
+    font-weight: $fw-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
     color: var(--color-text-muted);
 }
 
-.footerLinks {
+.navLinks {
     display: flex;
-    gap: $space-8;
+    flex-direction: column;
+    gap: $space-4;
+}
+
+.socialIcons {
+    display: flex;
+    gap: $space-4;
+    align-items: center;
+}
+
+.socialIconLink {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $radius-md;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    background: transparent;
+    transition: all $transition-normal;
+
+    svg {
+        width: 18px;
+        height: 18px;
+        transition: transform $transition-fast;
+    }
+
+    &:hover {
+        background: $color-accent-glow;
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+
+        svg {
+            transform: scale(1.1);
+        }
+    }
 }
 
 .footerLink {
     font-size: $text-sm;
     font-weight: $fw-medium;
-    color: var(--color-text-muted);
-    transition: color $transition-fast;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: all $transition-fast;
+    width: fit-content;
 
     &:hover {
         color: var(--color-accent);
+        transform: translateX(4px);
     }
 }
 
-.kottayam {
+.statusColumn {
+    display: flex;
+    flex-direction: column;
+    gap: $space-8;
+    text-align: left;
+    align-items: flex-start;
+
+    @include md {
+        align-items: flex-end;
+        text-align: right;
+    }
+}
+
+.statusIndicator {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-4;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: $radius-full;
     font-size: $text-xs;
-    font-weight: $fw-bold;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+    font-weight: $fw-semibold;
+    color: var(--color-text-primary);
+}
+
+.statusDot {
+    width: 8px;
+    height: 8px;
+    background: #10b981; // emerald-500
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+    animation: statusPulse 2s infinite;
+}
+
+@keyframes statusPulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.location {
+    font-size: $text-sm;
     color: var(--color-text-muted);
+
+    .time {
+        color: var(--color-text-primary);
+        font-weight: $fw-semibold;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+.footerBottom {
+    @include container;
+    padding-top: $space-12;
+    padding-bottom: $space-8;
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+    align-items: center;
+
+    @include md {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+.copyright {
+    font-size: $text-xs;
+    color: var(--color-text-muted);
+}
+
+.techStack {
+    font-size: $text-xs;
+    font-weight: $fw-medium;
+    color: var(--color-text-muted);
+    opacity: 0.6;
 }

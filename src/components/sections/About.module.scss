@@ -153,8 +153,12 @@
     perspective: 1000px;
     width: 100%;
     max-width: 100%;
-    display: flex;
+    display: none;
     justify-content: center;
+
+    @include sm {
+        display: flex;
+    }
 }
 
 .meshContainer {
