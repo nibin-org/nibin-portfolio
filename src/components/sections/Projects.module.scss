@@ -11,24 +11,63 @@
 }
 
 .featuredGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-6;
     margin-top: $space-12;
+
+    @include md {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include lg {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+// ─── Tab Switcher ─────────────────────────────
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-3;
+    margin-top: $space-10;
+    margin-bottom: $space-4;
+}
+
+.tab {
+    padding: $space-2 $space-6;
+    border-radius: $radius-full;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: $text-sm;
+    font-weight: $fw-semibold;
+    transition: all $transition-normal;
+
+    &:hover {
+        border-color: var(--color-accent);
+        color: var(--color-text);
+        background: $color-accent-glow;
+    }
+}
+
+.activeTab {
+    background: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
+    color: #0a0f1e !important;
+    box-shadow: 0 4px 12px $color-accent-glow;
 }
 
 .card {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: $space-8;
+    display: flex;
+    flex-direction: column;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: $radius-xl;
     overflow: hidden;
     position: relative;
     transition: all $transition-normal;
-
-    @include lg {
-        grid-template-columns: 1fr 1fr;
-        gap: 0;
-    }
 
     &:hover {
         border-color: var(--color-accent);
@@ -39,45 +78,33 @@
 
 .cardImage {
     position: relative;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 16 / 10;
     background: var(--color-card);
+    background-size: cover;
+    background-position: center top;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
 
-    @include lg {
-        aspect-ratio: auto;
-        height: 100%;
-    }
-
-    &::before {
-        content: 'TOK';
-        font-family: $font-primary;
-        font-weight: $fw-black;
-        font-size: $text-7xl;
-        color: var(--color-accent);
-        opacity: 0.1;
-        letter-spacing: -0.05em;
-    }
-
     &::after {
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(135deg, $color-accent-glow 0%, transparent 100%);
+        background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.4));
+        transition: opacity $transition-normal;
     }
 }
 
+
 .cardBody {
-    padding: $space-8;
+    padding: $space-6;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: $space-6;
+    gap: $space-4;
 
     @include lg {
-        padding: $space-12;
+        padding: $space-8;
     }
 }
 
@@ -90,13 +117,13 @@
 }
 
 .projectName {
-    font-size: $text-3xl;
+    font-size: $text-xl;
     font-weight: $fw-bold;
     color: var(--color-text);
     letter-spacing: -0.02em;
 
     @include lg {
-        font-size: $text-4xl;
+        font-size: $text-2xl;
     }
 }
 
