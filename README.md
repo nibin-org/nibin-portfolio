@@ -9,9 +9,8 @@ Personal portfolio website showcasing my work as a UI Engineer specialising in D
 ## Built With
 
 - **Next.js** — React framework for production
-- **SCSS/SASS** — Custom styling architecture
+- **SCSS** — Custom styling architecture
 - **GSAP** — Animations and scroll interactions
-- **AOS** — Animate on scroll
 - **Vercel** — Deployment
 
 ---
