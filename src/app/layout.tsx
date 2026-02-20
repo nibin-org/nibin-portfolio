@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/ui/ThemeProvider';
 import ScrollToTop from '@/components/ui/ScrollToTop';
+import Preloader from '@/components/ui/Preloader';
 import '@/styles/globals.scss';
 
 const inter = Inter({
@@ -51,6 +52,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.variable}>
         <ThemeProvider>
+          <Preloader />
           {children}
           <ScrollToTop />
         </ThemeProvider>
